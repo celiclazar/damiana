@@ -1,4 +1,8 @@
 <script>
+import ImageHeaderSection from '@/components/ImageHeaderSection.vue';
+import MainHeaderSection from '@/components/MainHeaderSection.vue';
+import AboutPreview from '@/components/AboutPreview.vue';
+import GalleryPreview from '@/components/GalleryPreview.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Link } from "@inertiajs/vue3";
 
@@ -15,14 +19,21 @@ export default {
     components: {
         AppLayout,
         Link,
+        ImageHeaderSection,
+        MainHeaderSection,
+        AboutPreview,
+        GalleryPreview,
     },
-   
+
 }
 </script>
 
 <template>
     <AppLayout>
-        
+        <ImageHeaderSection />
+        <MainHeaderSection class="move-up" />
+        <AboutPreview class="sm:py-28" />
+        <GalleryPreview class="" />
     </AppLayout>
 </template>
 
