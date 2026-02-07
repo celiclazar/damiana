@@ -1,21 +1,10 @@
 <script>
+import { Link } from "@inertiajs/vue3";
 export default {
     props: {
+        galleryPreview: Object,
     },
-    data() {
-        return {
-            galleryPreview: {
-                featuredImages: [
-                    { id: 1, url: 'images/gallery1.jpg', alt: 'Image 1' },
-                    { id: 2, url: 'images/gallery2.jpg', alt: 'Image 2' },
-                    { id: 3, url: 'images/gallery3.jpg', alt: 'Image 3' },
-                    { id: 4, url: 'images/gallery4.jpg', alt: 'Image 4' },
-                    { id: 5, url: 'images/gallery5.jpg', alt: 'Image 5' },
-                    { id: 6, url: 'images/gallery6.jpg', alt: 'Image 6' },
-                ]
-            }
-        }
-    }
+    components: { Link },
 }
 </script>
 
@@ -33,7 +22,7 @@ export default {
                 </div>
             </div>
             <div class="text-center pt-4">
-                <router-link to="/gallery" class="inline-block right-0 px-6 py-1 border border-gray-100 text-gray-100 font-button uppercase tracking-wide hover:bg-gray-100 hover:text-black transition-colors duration-300">View More &raquo;</router-link>
+                <Link to="/gallery" prefetch class="inline-block right-0 px-6 py-1 border border-gray-100 text-gray-100 font-button uppercase tracking-wide hover:bg-gray-100 hover:text-black transition-colors duration-300">View More &raquo;</Link>
             </div>
         </div>
     </div>
