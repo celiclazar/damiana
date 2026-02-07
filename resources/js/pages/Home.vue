@@ -33,7 +33,7 @@ export default {
         <ImageHeaderSection />
         <MainHeaderSection class="move-up" />
         <AboutPreview class="sm:py-28" />
-        <GalleryPreview class="" />
+        <GalleryPreview :galleryPreview="galleryPreview" class="py-28" />
     </AppLayout>
 </template>
 
