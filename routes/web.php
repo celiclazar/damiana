@@ -36,24 +36,24 @@ Route::get('/make-bucket-public', function () {
 });
 
 Route::get('/', function () {
-//    $files = Storage::disk('s3')->files('gallery');
-//
-//    $images = array_map(function($file) {
-//        return [
-//            'id' => $file, // Using the filename as a unique ID
-//            'url' => Storage::disk('s3')->url($file)
-//        ];
-//    }, $files);
+    $files = Storage::disk('s3')->files('gallery');
 
-    $images = Cache::remember('home_gallery_images', 86400, function () {
-        // Fetch all files in the 'gallery' folder
-        $files = Storage::disk('s3')->files('gallery');
-
-        return array_map(fn($file) => [
-            'id' => $file,
+    $images = array_map(function($file) {
+        return [
+            'id' => $file, // Using the filename as a unique ID
             'url' => Storage::disk('s3')->url($file)
-        ], $files);
-    });
+        ];
+    }, $files);
+
+//    $images = Cache::remember('home_gallery_images', 86400, function () {
+//        // Fetch all files in the 'gallery' folder
+//        $files = Storage::disk('s3')->files('gallery');
+//
+//        return array_map(fn($file) => [
+//            'id' => $file,
+//            'url' => Storage::disk('s3')->url($file)
+//        ], $files);
+//    });
 
     //dd($files, $featuredImages);
 
