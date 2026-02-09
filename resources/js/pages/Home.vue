@@ -12,9 +12,7 @@ export default {
         bookingPreview: Object,
         galleryPreview: Object,
         headerImageUrl: String,
-        merchPreview: Object,
-        reviewsPreview: Object,
-
+        imageHeaderSection: Object,
     },
     components: {
         AppLayout,
@@ -30,10 +28,12 @@ export default {
 
 <template>
     <AppLayout>
-        <ImageHeaderSection />
+        <ImageHeaderSection :imageHeaderSection />
         <MainHeaderSection class="move-up" />
         <AboutPreview class="sm:py-28" />
         <GalleryPreview :galleryPreview="galleryPreview" class="py-28" />
+
+        <div id="booking">Kontakt</div>
     </AppLayout>
 </template>
 

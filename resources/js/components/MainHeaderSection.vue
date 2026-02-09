@@ -8,7 +8,7 @@ export default {
     <div class="h-full flex flex-col justify-end items-center">
         <div class="font-heading text-center lg:mb-20">
             <div class="py-8">
-                <a href="/booking" class="inline-block px-2 sm:px-6 py-1 border border-gray-100 text-gray-100 font-button uppercase tracking-wide hover:bg-gray-100 hover:text-black transition-colors duration-300">Book Now &raquo;</a>
+                <a href="#booking" class="inline-block px-2 sm:px-6 py-1 border border-gray-100 text-gray-100 font-button uppercase tracking-wide hover:bg-gray-100 hover:text-black transition-colors duration-300">Book Now &raquo;</a>
             </div>
             <div>
                 <h1 class="text-3xl sm:text-7xl font-heading uppercase text-white tracking-wider">Tattoo Studio</h1>

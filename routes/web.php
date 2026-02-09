@@ -1,61 +1,34 @@
 <?php
 
 use App\Http\Controllers\GalleryController;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use Laravel\Fortify\Features;
-
-Route::get('/make-bucket-public', function () {
-    try {
-        $client = Storage::disk('s3')->getClient();
-        $bucket = config('filesystems.disks.s3.bucket');
-
-        $policy = [
-            "Version" => "2012-10-17",
-            "Statement" => [
-                [
-                    "Effect" => "Allow",
-                    "Principal" => "*",
-                    "Action" => ["s3:GetObject"],
-                    "Resource" => ["arn:aws:s3:::{$bucket}/*"]
-                ]
-            ]
-        ];
-
-        $client->putBucketPolicy([
-            'Bucket' => $bucket,
-            'Policy' => json_encode($policy),
-        ]);
-
-        return "Success: Bucket '{$bucket}' is now public. Images should load now!";
-    } catch (\Exception $e) {
-        return "Error: " . $e->getMessage();
-    }
-});
 
 Route::get('/', function () {
-    $files = Storage::disk('s3')->files('gallery');
+    $diskName = config('filesystems.cloud_disk');
+    $disk = Storage::disk($diskName);
 
-    $images = array_map(function($file) {
+    $files = $disk->files('gallery');
+    $backgroundFiles = $disk->files('background');
+    $backgroundImage = !empty($backgroundFiles) ? $disk->url($backgroundFiles[0]) : null;
+
+    $images = array_map(function($file) use ($disk) {
         return [
-            'id' => $file, // Using the filename as a unique ID
-            'url' => Storage::disk('s3')->url($file)
+            'id' => $file,
+            'url' => $disk->url($file)
         ];
     }, $files);
 
-//    $images = Cache::remember('home_gallery_images', 86400, function () {
-//        // Fetch all files in the 'gallery' folder
-//        $files = Storage::disk('s3')->files('gallery');
+//    $files = Storage::disk('s3')->files('gallery');
+//    $backgroundImage = Storage::disk('s3')->url(array_first(Storage::disk('s3')->files('background')));
 //
-//        return array_map(fn($file) => [
-//            'id' => $file,
+//    $images = array_map(function($file) {
+//        return [
+//            'id' => $file, // Using the filename as a unique ID
 //            'url' => Storage::disk('s3')->url($file)
-//        ], $files);
-//    });
-
-    //dd($files, $featuredImages);
+//        ];
+//    }, $files);
 
     return Inertia::render('Home', [
         'aboutPreview' => [
@@ -76,9 +49,8 @@ Route::get('/', function () {
             'title' => 'Booking',
             'description' => 'A short snippet from the booking page...',
         ],
-        'merchPreview' => [
-            'title' => 'Merch',
-            'backgroundImgUrl' => asset('images/home_merch.jpg')
+        'imageHeaderSection' => [
+            'imageUrl' => $backgroundImage
         ]
     ]);
 })->name('home');
