@@ -6,6 +6,20 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    $diskName = config('filesystems.cloud_disk');
+    $disk = Storage::disk($diskName);
+
+    $files = $disk->files('gallery');
+    $backgroundFiles = $disk->files('background');
+    $backgroundImage = !empty($backgroundFiles) ? $disk->url($backgroundFiles[0]) : null;
+
+    $images = array_map(function($file) use ($disk) {
+        return [
+            'id' => $file,
+            'url' => $disk->url($file)
+        ];
+    }, $files);
+
 //    $files = Storage::disk('s3')->files('gallery');
 //    $backgroundImage = Storage::disk('s3')->url(array_first(Storage::disk('s3')->files('background')));
 //
@@ -15,22 +29,6 @@ Route::get('/', function () {
 //            'url' => Storage::disk('s3')->url($file)
 //        ];
 //    }, $files);
-
-//    $diskName = config('filesystems.cloud_disk');
-//    $disk = Storage::disk($diskName);
-
-    $files = Storage::files('gallery');
-
-    // The rest of your code remains the same...
-    $backgroundFiles = Storage::files('background');
-    $backgroundImage = !empty($backgroundFiles) ? Storage::url($backgroundFiles[0]) : null;
-
-    $images = array_map(function($file) {
-        return [
-            'id' => $file, // Using the filename as a unique ID
-            'url' => Storage::disk('s3')->url($file)
-        ];
-    }, $files);
 
     return Inertia::render('Home', [
         'aboutPreview' => [
