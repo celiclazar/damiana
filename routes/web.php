@@ -16,14 +16,14 @@ Route::get('/', function () {
 //        ];
 //    }, $files);
 
-    $diskName = config('filesystems.cloud_disk');
-    $disk = Storage::disk($diskName);
+//    $diskName = config('filesystems.cloud_disk');
+//    $disk = Storage::disk($diskName);
 
-    $files = $disk->files('gallery');
+    $files = Storage::files('gallery');
 
     // The rest of your code remains the same...
-    $backgroundFiles = $disk->files('background');
-    $backgroundImage = !empty($backgroundFiles) ? $disk->url($backgroundFiles[0]) : null;
+    $backgroundFiles = Storage::files('background');
+    $backgroundImage = !empty($backgroundFiles) ? Storage::url($backgroundFiles[0]) : null;
 
     $images = array_map(function($file) {
         return [
