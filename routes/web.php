@@ -25,12 +25,22 @@ Route::get('/', function () {
     $backgroundFiles = Storage::files('background');
     $backgroundImage = !empty($backgroundFiles) ? Storage::url($backgroundFiles[0]) : null;
 
-    $images = array_map(function($file) {
+    $images = array_map(function($file) use ($disk) {
         return [
-            'id' => $file, // Using the filename as a unique ID
-            'url' => Storage::disk('s3')->url($file)
+            'id' => $file,
+            'url' => $disk->url($file)
         ];
     }, $files);
+
+//    $files = Storage::disk('s3')->files('gallery');
+//    $backgroundImage = Storage::disk('s3')->url(array_first(Storage::disk('s3')->files('background')));
+//
+//    $images = array_map(function($file) {
+//        return [
+//            'id' => $file, // Using the filename as a unique ID
+//            'url' => Storage::disk('s3')->url($file)
+//        ];
+//    }, $files);
 
     return Inertia::render('Home', [
         'aboutPreview' => [
