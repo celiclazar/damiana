@@ -6,8 +6,24 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    $files = Storage::disk('s3')->files('gallery');
-    $backgroundImage = Storage::disk('s3')->url(array_first(Storage::disk('s3')->files('background')));
+//    $files = Storage::disk('s3')->files('gallery');
+//    $backgroundImage = Storage::disk('s3')->url(array_first(Storage::disk('s3')->files('background')));
+//
+//    $images = array_map(function($file) {
+//        return [
+//            'id' => $file, // Using the filename as a unique ID
+//            'url' => Storage::disk('s3')->url($file)
+//        ];
+//    }, $files);
+
+    $diskName = config('filesystems.cloud_disk');
+    $disk = Storage::disk($diskName);
+
+    $files = $disk->files('gallery');
+
+    // The rest of your code remains the same...
+    $backgroundFiles = $disk->files('background');
+    $backgroundImage = !empty($backgroundFiles) ? $disk->url($backgroundFiles[0]) : null;
 
     $images = array_map(function($file) {
         return [
