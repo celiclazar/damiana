@@ -18,7 +18,7 @@ export default {
             </div>
             <div class="pt-4 pb-">
                 <img src="/icons/location.png" class="m-auto h-4" >
-                <p class="text-sm text-gray-400 mt-2">Sombor, Serbia</p>
+                <p class="text-sm text-gray-400 mt-2">Novi Sad, Serbia</p>
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@ export default {
                 </div>
             </div>
             <div class="text-center pt-4">
-                <Link to="/gallery" prefetch class="inline-block right-0 px-6 py-1 border border-gray-100 text-gray-100 font-button uppercase tracking-wide hover:bg-gray-100 hover:text-black transition-colors duration-300">View More &raquo;</Link>
+                <Link href="/gallery" prefetch class="inline-block right-0 px-6 py-1 border border-gray-100 text-gray-100 font-button uppercase tracking-wide hover:bg-gray-100 hover:text-black transition-colors duration-300">View More &raquo;</Link>
             </div>
         </div>
     </div>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('file_path');
             $table->string('alt')->nullable();
             $table->text('description')->nullable();
-            $table->integer('order')->default(0);
+            $table->unsignedInteger('order')->default(0)->index();
             $table->enum('type', ['tattoo', 'sketch'])->default('tattoo');
             $table->timestamps();
         });

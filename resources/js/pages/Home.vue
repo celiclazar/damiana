@@ -3,6 +3,7 @@ import ImageHeaderSection from '@/components/ImageHeaderSection.vue';
 import MainHeaderSection from '@/components/MainHeaderSection.vue';
 import AboutPreview from '@/components/AboutPreview.vue';
 import GalleryPreview from '@/components/GalleryPreview.vue';
+import BookingSection from '@/components/BookingSection.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Link } from "@inertiajs/vue3";
 
@@ -21,6 +22,7 @@ export default {
         MainHeaderSection,
         AboutPreview,
         GalleryPreview,
+        BookingSection
     },
 
 }
@@ -30,10 +32,9 @@ export default {
     <AppLayout>
         <ImageHeaderSection :imageHeaderSection />
         <MainHeaderSection class="move-up" />
-        <AboutPreview class="sm:py-28" />
-        <GalleryPreview :galleryPreview="galleryPreview" class="py-28" />
-
-        <div id="booking">Kontakt</div>
+        <AboutPreview :aboutPreview class="sm:py-28" />
+        <GalleryPreview :galleryPreview="galleryPreview" class="py-26" />
+        <BookingSection id="booking" />
     </AppLayout>
 </template>
 
