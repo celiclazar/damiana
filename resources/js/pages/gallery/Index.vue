@@ -1,30 +1,56 @@
 <script>
-
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Navigation, EffectFade } from 'swiper/modules';
-
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/effect-fade';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { ref, computed } from 'vue';
+import { Link } from "@inertiajs/vue3";
+import AppLayout from "@/layouts/AppLayout.vue";
+import ImageModal from "@/components/ImageModal.vue";
 
 
 export default {
     components: {
         AppLayout,
-        Swiper,
-        SwiperSlide,
+        Link,
+        ImageModal,
     },
 
-    props: {
-        images: {
-            type: Object,
-            required: true,
-        },
-    },
-    setup() {
+    props: { images: Array },
+    setup(props) {
+        const currentFilter = ref('tattoo');
+        const modalOpen = ref(false);
+
+        const filteredImages = computed(() => {
+            switch (currentFilter.value) {
+                case 'tattoo':
+                    return props.images.filter(image => image.type === 'tattoo');
+                case 'sketch':
+                    return props.images.filter(image => image.type === 'sketch');
+                default:
+                    return props.images;
+            }
+        });
+
+        const modalImages = ref([]);
+
+        function setFilter(filter) {
+            currentFilter.value = filter;
+        }
+
+        function openModalWithSlider(image) {
+            const startIndex = filteredImages.value.findIndex(img => img.id === image.id);
+            modalImages.value = { images: filteredImages.value, startIndex };
+            modalOpen.value = true;
+        }
+
+        function setFilter(filter) {
+            currentFilter.value = filter;
+        }
+
         return {
-            modules: [Navigation, EffectFade],
+            currentFilter,
+            filteredImages,
+            setFilter,
+            modalOpen,
+            modalImages,
+            openModalWithSlider,
         };
     },
 
@@ -33,22 +59,29 @@ export default {
 
 <template>
     <AppLayout>
-        <div class="fixed inset-0 bg-black bg-opacity-80 flex flex-col justify-center items-center" @click.self="$emit('close')">
-            <div class="h-2/3 sm:w-full bg-black bg-opacity-95">
-                <swiper :navigation="true"
-                        :modules="modules"
-                        class="swiper-container">
-                    <!-- Use v-for to iterate over the images array and generate SwiperSlide components -->
-                    <swiper-slide v-for="image in images" :key="image.id" class="swiper-slide sm:flex sm:flex-row px-12">
-                        <img :src="image.url" :alt="image.alt" class="swiper-img">
-                        <div class="p-2 ">
-                            <h1 class="mt-4 sm:mt-20 sm:ml-10 text-white text-5xl font-heading">{{ image.title }}</h1>
-                            <p class="mt-2 sm:w-1/2 sm:mt-10 sm:ml-10 text-white text-xl font-body">{{ image.alt }} and some extra description</p>
+        <section class="bg-black text-white py-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-heading text-center mb-12">Gallery</h2>
+                <!-- Tabs or Category Filters -->
+                <div class="flex justify-center mb-8">
+                    <!-- Assuming you have some method to switch tabs or filter categories -->
+                    <button @click="setFilter('tattoo')" class="bg-transparent font-body border-none text-white mr-2 p-2 hover:underline" :class="{ 'underline': currentFilter === 'tattoo' }">Tattoos</button>
+                    <button @click="setFilter('sketch')" class="bg-transparent border-none text-white p-2 hover:underline" :class="{ 'underline': currentFilter === 'sketch' }">Available sketches</button>
+                </div>
+                <!-- Grid of images -->
+                <div class="w-2/3 mx-auto">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        <!-- Loop to render filtered images -->
+                        <div v-for="image in filteredImages" :key="image.id" class="overflow-hidden grayscale">
+                            <img :src="image.url" :alt="image.alt" class="w-full h-auto object-cover mx-auto rounded-xl" @click="openModalWithSlider(image)">
                         </div>
-                    </swiper-slide>
-                </swiper>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
+
+        <ImageModal v-if="modalOpen" :imagesData="modalImages"  @close="modalOpen = false" />
+
     </AppLayout>
 </template>
 

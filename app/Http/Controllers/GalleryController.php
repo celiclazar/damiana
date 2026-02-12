@@ -8,53 +8,50 @@ use App\Models\Image;
 
 class GalleryController extends Controller
 {
-    // Need to fix this
     public function index()
     {
-        $images = Image::all(); // Fetch all images or use pagination
+        /*
+         * If I need filter in gallery page, use it like this. Look into the model class.
+         *
+
+        $type = $request->query('type', 'tattoo');
+        $images = Image::where('type', $type)
+            ->orderBy('order', 'asc')
+            ->get();
+        *
+        */
 
         return Inertia::render('gallery/Index', [
-            'images' => $images->map(function ($image) {
-                $image->url = asset('storage/' . $image->file_path); // Generate a URL to the image file
-                return $image;
-            }),
+            'images' => Image::orderBy('order', 'asc')->get()
         ]);
     }
 
     public function showImage($id)
     {
-        $image = Image::findOrFail($id);
-        $image->url = asset('storage/' . $image->file_path);
-
         return Inertia::render('Image/Show', [
-            'image' => $image,
-
+            'image' => Image::findOrFail($id)
         ]);
     }
 
     public function nextImage($id)
     {
-        // Find the current image
-        $currentImage = Image::findOrFail($id);
-        // Get the next image
-        $nextImage = Image::where('order', '>', $currentImage->order)
+        $current = Image::findOrFail($id);
+
+        $next = Image::where('order', '>', $current->order)
             ->orderBy('order', 'asc')
             ->first();
 
-        // Redirect to the next image or back to the current image if it's the last one
-        return redirect()->route('images.show', ['id' => $nextImage ? $nextImage->id : $currentImage->id]);
+        return redirect()->route('images.show', ['id' => $next ? $next->id : $current->id]);
+
     }
 
     public function previousImage($id)
     {
-        // Find the current image
-        $currentImage = Image::findOrFail($id);
-        // Get the previous image
-        $previousImage = Image::where('order', '<', $currentImage->order)
+        $current = Image::findOrFail($id);
+        $prev = Image::where('order', '<', $current->order)
             ->orderBy('order', 'desc')
             ->first();
 
-        // Redirect to the previous image or back to the current image if it's the first one
-        return redirect()->route('images.show', ['id' => $previousImage ? $previousImage->id : $currentImage->id]);
+        return redirect()->route('images.show', ['id' => $prev ? $prev->id : $current->id]);
     }
 }
